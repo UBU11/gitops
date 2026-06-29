@@ -9,23 +9,23 @@ jobs:
   build-and-secure:
     runs-on: ubuntu-latest
     steps:
-      # Upgraded to v7 - Native June 2026 Supply-Chain Security Guardrails
+      
       - name: Checkout Source Code
         uses: actions/checkout@v7
 
-      # Upgraded to v4 - May 2026 Spec
+      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      # Upgraded to v4 - May 2026 Spec
+
       - name: Log into Private Harbor Registry
         uses: docker/login-action@v4
         with:
           registry: ${{ secrets.HARBOR_URL }}
           username: ${{ secrets.HARBOR_USERNAME }}
-          password: ${{ secrets.HARBOR_PASSWORD }}
+          password: ${{ secrets.HARBOR_TOKEN }}
 
-      # Step I from Blueprint: Build Local Container Image (Upgraded to v7)
+      
       - name: Build Application Image
         uses: docker/build-push-action@v7
         with:
