@@ -1,17 +1,9 @@
-FROM node:24-alpine AS builder
 
-WORKDIR /app
+FROM nginx:alpine
 
-COPY package*.json ./
-RUN npm ci
+       
+RUN echo '<!DOCTYPE html><html><head><title>Zecure GitOps Staging</title><style>body{font-family:sans-serif;background:#0f172a;color:#f8fafc;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}h1{border-left:4px solid #38bdf8;padding-left:15px;}</style></head><body><h1>🚀 Zecure DevOps GitOps Pipeline Functional</h1></body></html>' > /usr/share/nginx/html/index.html
 
-COPY . .
+EXPOSE 80
 
-FROM node:24-alpine AS runner
-WORKDIR /app
-        
-COPY --from=builder /app ./
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
