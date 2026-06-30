@@ -1,0 +1,20 @@
+apiVersion: secrets.infisical.com/v1beta1
+kind: InfisicalStaticSecret
+metadata:
+  name: harbor-vault-sync
+  namespace: harbor
+spec:
+  infisicalAuthRef:
+    name: infisical-machine-auth
+    namespace: harbor
+  syncOptions:
+    refreshInterval: 1m                 
+  sources:
+    - projectSlug: gitops-z8vu   e
+      environmentSlug: staging
+      secretPath: /production-registry
+  targets:
+    - name: harbor-core
+      namespace: harbor
+      kind: Secret
+      creationPolicy: Owner

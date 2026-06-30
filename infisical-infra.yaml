@@ -1,0 +1,27 @@
+apiVersion: secrets.infisical.com/v1beta1
+kind: InfisicalConnection
+metadata:
+  name: infisical-cloud-connection
+  namespace: harbor
+spec:
+  address: https://app.infisical.com
+---
+apiVersion: secrets.infisical.com/v1beta1
+kind: InfisicalAuth
+metadata:
+  name: infisical-machine-auth
+  namespace: harbor
+spec:
+  infisicalConnectionRef:
+    name: infisical-cloud-connection
+    namespace: harbor                  e
+  method: universal
+  universal:
+    clientIdRef:
+      name: infisical-auth-credentials
+      namespace: harbor                e
+      key: clientId
+    clientSecretRef:
+      name: infisical-auth-credentials
+      namespace: harbor               e
+      key: clientSecret
