@@ -25,8 +25,6 @@ The pipeline flow spans source code updates, automated container image building,
 | `infisical-static.yaml` | Infisical secret sync declaration targeting the registry namespace. |
 | `Dockerfile` | Multi-stage build definition for the web application deployment. |
 | `.github/workflows/ci.yml` | GitHub Actions workflow for building, scanning, and pushing images. |
-| `templates/applicationset.yaml` | Helm template configuring ArgoCD ApplicationSets for service discovery. |
-| `test/cloudflare-tunnel.yaml` | Deployment configuration running Cloudflare Tunnel for secure endpoints. |
 
 ---
 
@@ -53,9 +51,6 @@ The GitHub Actions workflow in [.github/workflows/ci.yml](file:///home/ubu/Docum
 1. **Docker Buildx:** Compiles the container image using the project's [Dockerfile](file:///home/ubu/Documents/Devops/project_2/gitops/Dockerfile).
 2. **Trivy Vulnerability Scan:** Scans the newly compiled image. The workflow fails (exit code 1) if `CRITICAL` or `HIGH` vulnerabilities are found, halting the deployment.
 3. **Registry Push:** If the scan passes, the image is tagged with both the commit SHA and `latest`, and pushed to the private Harbor registry.
-
-### 5. GitOps CD Engine
-Continuous Delivery is driven by ArgoCD. The template [templates/applicationset.yaml](file:///home/ubu/Documents/Devops/project_2/gitops/templates/applicationset.yaml) uses a Git generator to monitor directories under `apps/*`. When a new service subdirectory is added, ArgoCD automatically generates a corresponding Application and deploys it to EKS.
 
 ---
 
