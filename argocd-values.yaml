@@ -1,0 +1,19 @@
+global:
+  domain: argocd.example.com
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: alb 
+    annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+  
+  
+  extraArgs:
+    - --insecure
+
+configs:
+  cm:
+    application.instanceLabelKey: argocd.argoproj.io/instance
+    timeout.reconciliation: 180s

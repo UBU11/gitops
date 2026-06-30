@@ -1,0 +1,15 @@
+expose:
+  type: clusterIP
+  tls:
+    enabled: false 
+
+externalURL: http://localhost:8085 # Change this later to your AWS ALB domain name
+
+trivy:
+  enabled: true
+  replicas: 1
+
+database:
+  type: internal
+persistence:
+  enabled: false

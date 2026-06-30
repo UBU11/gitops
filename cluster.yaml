@@ -1,0 +1,18 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: zecure-devops-cluster
+  region: ap-south-1
+
+managedNodeGroups:
+  - name: standard-workers
+    instanceType: c7i-flex.large
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    volumeSize: 30
+    iam:
+     withAddonPolicies:
+       autoScaler: true
+       ebs: true

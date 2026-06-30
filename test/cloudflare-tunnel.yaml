@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflare-tunnel
+  namespace: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflare-tunnel
+  template:
+    metadata:
+      labels:
+        app: cloudflare-tunnel
+    spec:
+     containers:
+     - name: tunnel
+       image: cloudflare/cloudflared:latest
+       args:
+         - tunnel
+         - --no-autoupdate
+         - run
+         - --token
+         - "eyJhIjoiYjdlMTZiNzQzZmRhYmM1MzNiYzQ2OGIwMDE3OWZiNDMiLCJ0IjoiOGMyZDA1NzctNGIzMS00MWE4LThjZDctNThiY2MxYmZiN2U5IiwicyI6IlkyUTNaRGhtTnpjdFpqazRNUzAwWlRZd0xUaGpaVE10Tm1Fek56aGlZbU0yT1dSaiJ9"

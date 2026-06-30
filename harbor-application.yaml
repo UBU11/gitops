@@ -1,0 +1,69 @@
+kind: Application
+metadata:
+  name: harbor
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://helm.goharbor.io'
+    targetRevision: 1.19.1
+    chart: harbor
+    helm:
+      values: |
+        externalURL: https://harbor.zecure.tech
+        expose:
+          type: ingress
+          ingress:
+            hosts:
+              core: harbor.zecure.tech
+            annotations:
+              kubernetes.io/ingress.class: alb
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/target-type: ip
+              alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+              alb.ingress.kubernetes.io/certificate-arn: #arn
+        persistence:
+          enabled: true
+          imageChartStorage:
+            type: s3
+            s3:
+              bucket: zecure-harbor-storage-backend
+              region: ap-south-1
+              accesskey: #s3 access key
+              secretkey: #s3 secretkey
+          persistentVolumeClaim:
+            registry:
+              storageClass: "-"
+            jobservice:
+              jobLog:
+                storageClass: "gp3"
+                size: 5Gi
+            database:
+              storageClass: "gp3"
+              size: 10Gi
+            redis:
+              storageClass: "gp3"
+              size: 2Gi
+            trivy:
+              storageClass: "gp3"
+              size: 10Gi
+        registry:
+          serviceAccountName: harbor-registry-sa
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: harbor
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+  ignoreDifferences:
+    - group: ""
+      kind: PersistentVolumeClaim
+      name: harbor-jobservice
+      jsonPointers:
+        - /spec/volumeName
+        - /metadata/annotations
+   
